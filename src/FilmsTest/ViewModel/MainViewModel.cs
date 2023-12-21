@@ -1,5 +1,6 @@
 ﻿using FilmsTest.Model;
 using FilmsTest.Model.DBContext;
+using FilmsTest.View;
 using FilmsTest.ViewModel.Command;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
@@ -45,11 +46,13 @@ namespace FilmsTest.ViewModel
             set => Set(ref _actor, value);
         }
 
+
+
         #region Команда первоначальной загрузки всей базы данных
         public ICommand CreateDatabaseCommand { get; }
         
-        private bool CanCreateDatabaseExecute(object? parameter) => true;
-        private async Task OnCreateDatabaseExecuted(object? parameter)
+        private bool CanCreateDatabaseCommandExecute(object? parameter) => true;
+        private async Task OnCreateDatabaseCommandExecuted(object? parameter)
         {
             await CreateDatabase();
         }
@@ -300,11 +303,10 @@ namespace FilmsTest.ViewModel
                     #endregion
 
                     Films = new ObservableCollection<Film>(await context.Films.ToListAsync());
-                    FilmsFilter = new ObservableCollection<Film>(Films);
+                    FilmsFiltered = new ObservableCollection<Film>(Films);
                     Genres = new ObservableCollection<Genre>(await context.Genres.ToListAsync());
                     FilmGenres = new ObservableCollection<FilmGenre>(await context.FilmGenres.ToListAsync());
                     Actors = new ObservableCollection<Actor>(await context.Actors.ToListAsync());
-                    ActorsFilter = new ObservableCollection<Actor>(Actors);
                     FilmActors = new ObservableCollection<FilmActor>(await context.FilmActors.ToListAsync());
                 }
             }
@@ -320,11 +322,12 @@ namespace FilmsTest.ViewModel
         #endregion
 
 
+
         #region Команда для загрузки/обновления
       
         public ICommand LoadFilmDataCommand { get; }
-        private bool CanFilmDataLoadExecute(object? parameter) => true;
-        private async Task OnFilmDataLoadExecuted(object? parameter)
+        private bool CanFilmDataLoadCommandExecute(object? parameter) => true;
+        private async Task OnFilmDataLoadCommandExecuted(object? parameter)
         {
             await LoadFilmDataAsync();
         }
@@ -344,10 +347,11 @@ namespace FilmsTest.ViewModel
         #endregion
 
 
+
         #region Фильтрация фильмов по критериям
 
         private ObservableCollection<Film> _filmsFilter;
-        public ObservableCollection<Film> FilmsFilter
+        public ObservableCollection<Film> FilmsFiltered
         {
             get => _filmsFilter;
             set => Set(ref _filmsFilter, value);
@@ -423,13 +427,31 @@ namespace FilmsTest.ViewModel
                 query = query.Where(entry => entry.Actor.ActName.Contains(FilmFilterActor, StringComparison.OrdinalIgnoreCase));
             }
 
-            FilmsFilter = new ObservableCollection<Film>(query.Select(entry => entry.Film).Distinct());
+            FilmsFiltered = new ObservableCollection<Film>(query.Select(entry => entry.Film).Distinct());
         }
 
         #endregion
 
 
-        #region Актеры выбранного фильма
+
+        #region Команда для открытия страницы с актерами выбранного фильма  
+
+        public ICommand GotoDetailFilmCommand { get; }
+        private bool CanGotoDetailFilmCommandExecute(object? parameter) => true;
+        private async Task OnGotoDetailFilmCommandExecuted(object? parameter)
+        {
+            await GotoDetailFilm(SelectedFilm);
+        }
+
+        public async Task GotoDetailFilm(Film film)
+        {
+
+            await Shell.Current.GoToAsync($"{nameof(FilmDetailsPage)}?FmID={film.FmID}");
+           
+
+        }
+
+        #region Актеры выбранного фильма        
 
         private ObservableCollection<Actor> _actorsFilter;
         public ObservableCollection<Actor> ActorsFilter
@@ -446,18 +468,16 @@ namespace FilmsTest.ViewModel
             {
                 _selectedFilm = value;
                 OnPropertyChanged(nameof(SelectedFilm));
-                ApplyFilmInfoFilter(); 
+                ApplyFilmInfoFilter();
             }
         }
 
         private void ApplyFilmInfoFilter()
         {
             var query = from film in Films
-                        join filmGenre in FilmGenres on film.FmID equals filmGenre.FmID
-                        join genre in Genres on filmGenre.GenID equals genre.GenID
                         join filmActor in FilmActors on film.FmID equals filmActor.FmID
                         join actor in Actors on filmActor.ActID equals actor.ActID
-                        select new { Film = film, Genre = genre, Actor = actor };
+                        select new { Film = film, Actor = actor };
 
 
             if (SelectedFilm != null)
@@ -470,13 +490,17 @@ namespace FilmsTest.ViewModel
 
         #endregion
 
-        public MainViewModel() 
+        #endregion
+
+
+
+        public MainViewModel()
         {
-            CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseExecuted, CanCreateDatabaseExecute);
+            CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
-            LoadFilmDataCommand = new RelayCommand(OnFilmDataLoadExecuted, CanFilmDataLoadExecute);
+            LoadFilmDataCommand = new RelayCommand(OnFilmDataLoadCommandExecuted, CanFilmDataLoadCommandExecute);
 
-            
-        }  
+            GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace FilmsTest
         {
             InitializeComponent();
             Routing.RegisterRoute("MainSearchPage", typeof(MainSearchPage));
-            //Routing.RegisterRoute("DataFilmPage", typeof(DataFilmPage));
+            Routing.RegisterRoute("FilmDetailsPage", typeof(FilmDetailsPage));
         }
     }
 }

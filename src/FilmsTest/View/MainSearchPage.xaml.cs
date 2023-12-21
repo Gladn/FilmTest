@@ -1,4 +1,5 @@
-﻿using FilmsTest.ViewModel;
+﻿
+using FilmsTest.ViewModel;
 
 namespace FilmsTest.View
 {

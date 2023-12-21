@@ -4,13 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FilmsTest.View"
+    FlyoutIcon="list_img.png"
     Shell.FlyoutBehavior="Flyout"
-    Shell.TabBarIsVisible="False"
+    Shell.FlyoutBackdrop="Blue"
     Title="MAUI Поисковик фильмов">
 
 
-    <FlyoutItem Title="Поисковик"  FlyoutIcon="List">
+
+    <FlyoutItem Title="Поисковик"  FlyoutIcon="dotnet_bot.png">
         <ShellContent ContentTemplate="{DataTemplate local:MainSearchPage}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Список фильмов и актеров"  FlyoutIcon="List">
+        <ShellContent ContentTemplate="{DataTemplate local:FilmDetailsPage}"/>
     </FlyoutItem>
 
 </Shell>
