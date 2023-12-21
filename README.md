@@ -45,3 +45,7 @@
 .
 
 ![ScreenShot_7](https://github.com/Gladn/FilmTest/assets/92585647/511daaec-f9d3-4b45-b16a-9cedd577b465)
+
+# Порядок развертывания
+
+Скачать и установить filmtest.apk
