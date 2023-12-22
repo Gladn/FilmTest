@@ -39,13 +39,14 @@
 ![ScreenShot_6](https://github.com/Gladn/FilmTest/assets/92585647/fac769e7-eca3-48cb-9fdd-2e84eb7e3c60)
 
 
-Чтобы посмотреть всех актеров фильма нужно нажать на конкретный фильм (Придется нажать дважды, ну тут как можно быстрее сделал, так себе вариант, чтоб какой то обзор был)
+Чтобы посмотреть актеров/жанры фильма нужно нажать на конкретный фильм
 
 
 .
+![Screenshot_9](https://github.com/Gladn/FilmTest/assets/92585647/af6d4078-20ea-4d31-b36c-fd11035e30e6)
 
-![ScreenShot_7](https://github.com/Gladn/FilmTest/assets/92585647/511daaec-f9d3-4b45-b16a-9cedd577b465)
+
 
 # Порядок развертывания
 
-Скачать и установить filmtest.apk
+Скачать и установить Films.apk
