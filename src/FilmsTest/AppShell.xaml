@@ -15,8 +15,5 @@
         <ShellContent ContentTemplate="{DataTemplate local:MainSearchPage}"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Список фильмов и актеров"  FlyoutIcon="List">
-        <ShellContent ContentTemplate="{DataTemplate local:FilmDetailsPage}"/>
-    </FlyoutItem>
 
 </Shell>

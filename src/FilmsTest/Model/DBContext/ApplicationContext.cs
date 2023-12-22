@@ -19,6 +19,12 @@ namespace FilmsTest.Model.DBContext
             //optionsBuilder.UseSqlite($"Filename={dbPathWin}");
             #endregion
 
+
+            if (!Directory.Exists(FileSystem.AppDataDirectory))
+            {
+                Directory.CreateDirectory(FileSystem.AppDataDirectory);
+            }
+
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, dbFileName);
 
             optionsBuilder.UseSqlite($"Filename={dbPath}");

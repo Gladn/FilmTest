@@ -11,6 +11,9 @@ namespace FilmsTest.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+
+        #region Свойства для доступа к данным в базе данных
+
         private ObservableCollection<Film> _film;
         public ObservableCollection<Film> Films
         {
@@ -45,16 +48,26 @@ namespace FilmsTest.ViewModel
             get => _actor;
             set => Set(ref _actor, value);
         }
+        
+        #endregion
 
 
 
         #region Команда первоначальной загрузки всей базы данных
+
+        private bool _startUsingControls = true;
+        public bool StartUsingControls
+        {
+            get => _startUsingControls;
+            set => Set(ref _startUsingControls, value);
+        }
+
         public ICommand CreateDatabaseCommand { get; }
         
         private bool CanCreateDatabaseCommandExecute(object? parameter) => true;
         private async Task OnCreateDatabaseCommandExecuted(object? parameter)
         {
-            await CreateDatabase();
+            await CreateDatabase();            
         }
         
         private async Task CreateDatabase()
@@ -66,8 +79,12 @@ namespace FilmsTest.ViewModel
                     #region DEBUG
                     //await context.Database.EnsureDeletedAsync();
                     #endregion
-
-                    await context.Database.EnsureCreatedAsync();
+                    
+                    if (context.Database != null)
+                    {
+                        await context.Database.EnsureCreatedAsync();
+                    }
+                    
 
 
                     #region Дефолт информация Фильмы
@@ -308,13 +325,14 @@ namespace FilmsTest.ViewModel
                     FilmGenres = new ObservableCollection<FilmGenre>(await context.FilmGenres.ToListAsync());
                     Actors = new ObservableCollection<Actor>(await context.Actors.ToListAsync());
                     FilmActors = new ObservableCollection<FilmActor>(await context.FilmActors.ToListAsync());
+                    StartUsingControls = true;
                 }
             }
             catch(Exception ex)
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    Application.Current.MainPage.DisplayAlert("Уведомление", $"База данных успешно создана.{ex.Message}", "OK");
+                    Application.Current.MainPage.DisplayAlert("Уведомление", $"База данных не создана. Код ошибки: {ex.Message}", "OK");
                 });
             }
         }
@@ -396,7 +414,6 @@ namespace FilmsTest.ViewModel
             }
         }
 
-
         private void ApplyFilter()
         {
 
@@ -440,24 +457,30 @@ namespace FilmsTest.ViewModel
         private bool CanGotoDetailFilmCommandExecute(object? parameter) => true;
         private async Task OnGotoDetailFilmCommandExecuted(object? parameter)
         {
-            await GotoDetailFilm(SelectedFilm);
+            await GotoDetailFilm(SelectedFilm, ActorsFiltered, GenresFiltered);
         }
 
-        public async Task GotoDetailFilm(Film film)
+        public async Task GotoDetailFilm(Film film, ObservableCollection<Actor> selectedFilmActors, ObservableCollection<Genre> selectedFilmGenres)
         {
-
-            await Shell.Current.GoToAsync($"{nameof(FilmDetailsPage)}?FmID={film.FmID}");
-           
-
+            Application.Current.MainPage.Navigation.PushAsync(new FilmDetailsPage(
+                                            new FilmDetailsViewModel(film, selectedFilmActors, selectedFilmGenres)));                  
         }
 
-        #region Актеры выбранного фильма        
+
+        #region Актеры и жанры выбранного фильма для отображения        
 
         private ObservableCollection<Actor> _actorsFilter;
-        public ObservableCollection<Actor> ActorsFilter
+        public ObservableCollection<Actor> ActorsFiltered
         {
             get => _actorsFilter;
             set => Set(ref _actorsFilter, value);
+        }
+
+        private ObservableCollection<Genre> _genresFilter;
+        public ObservableCollection<Genre> GenresFiltered
+        {
+            get => _genresFilter;
+            set => Set(ref _genresFilter, value);
         }
 
         private Film _selectedFilm;
@@ -475,9 +498,11 @@ namespace FilmsTest.ViewModel
         private void ApplyFilmInfoFilter()
         {
             var query = from film in Films
+                        join filmGenre in FilmGenres on film.FmID equals filmGenre.FmID
+                        join genre in Genres on filmGenre.GenID equals genre.GenID
                         join filmActor in FilmActors on film.FmID equals filmActor.FmID
                         join actor in Actors on filmActor.ActID equals actor.ActID
-                        select new { Film = film, Actor = actor };
+                        select new { Film = film, Genre = genre, Actor = actor };
 
 
             if (SelectedFilm != null)
@@ -485,7 +510,8 @@ namespace FilmsTest.ViewModel
                 query = query.Where(entry => entry.Film.FmID == SelectedFilm.FmID);
             }
 
-            ActorsFilter = new ObservableCollection<Actor>(query.Select(entry => entry.Actor).Distinct());
+            GenresFiltered = new ObservableCollection<Genre>(query.Select(entry => entry.Genre).Distinct());
+            ActorsFiltered = new ObservableCollection<Actor>(query.Select(entry => entry.Actor).Distinct());
         }
 
         #endregion

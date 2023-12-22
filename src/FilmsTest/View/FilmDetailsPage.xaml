@@ -4,56 +4,51 @@
              x:Class="FilmsTest.View.FilmDetailsPage"
              xmlns:viewmodel="clr-namespace:FilmsTest.ViewModel" 
              Shell.BackgroundColor="LightBlue"
-             Title="Список Актеров" >
+             Title="Детали фильма" >
     <VerticalStackLayout>
-        <Label Style="{StaticResource MediumLabel}" Text="Тут должны быть актеры выбранного: " />
+        <StackLayout>
+            <Label Text="{Binding SelectedFilm.FmTitle}" FontSize="Title" Margin="10" />
+        </StackLayout>
+        
+        <Label Style="{StaticResource MediumLabel}" 
+               Text="Актеры: " 
+               Margin="10"/>
+
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            
-       
-            <CollectionView SelectionMode="Single" 
-                ItemsSource="{Binding Films}" 
-                SelectedItem="{Binding SelectedFilm}"
-                IsVisible="{Binding IsFilmSelected}"
+            <CollectionView SelectionMode="None" 
+                ItemsSource="{Binding SelectedFilmActors}" 
                 Grid.Column="0"
                 Margin="10">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <VerticalStackLayout>
-                        <Label Text="{Binding FmTitle}" />
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup Name="CommonStates">
-                                <VisualState Name="Normal"></VisualState>
-                                <VisualState Name="Selected">
-                                    <VisualState.Setters>
-                                        <Setter Property="BackgroundColor" Value="LightSkyBlue"></Setter>
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </VerticalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <CollectionView SelectionMode="Single" 
-                ItemsSource="{Binding ActorsFilter}" 
-                Grid.Column="1"
-                        Margin="5">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <VerticalStackLayout>
-                        <Label Text="{Binding ActName}" />
-                    </VerticalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ActName}" 
+                               Margin="10"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
 
+        <Label Style="{StaticResource MediumLabel}" 
+               Text="Жанры: "
+               Margin="10"/>
+
+        <Grid>
+            <CollectionView SelectionMode="None" 
+                            ItemsSource="{Binding SelectedFilmGenres}" 
+                            Grid.Column="0"
+                            Margin="10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding GenName}" 
+                                   Margin="10"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        
     </VerticalStackLayout>
 </ContentPage>
