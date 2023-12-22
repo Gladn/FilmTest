@@ -1,14 +1,14 @@
-﻿
-using FilmsTest.ViewModel;
+﻿using FilmsTest.ViewModel;
 
-namespace FilmsTest.View
+namespace FilmsTest
 {
-    public partial class MainSearchPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Skip)]
+    public partial class MainPage : ContentPage
     {
-        public MainSearchPage()
+        public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel();
+            BindingContext = new MainSearchViewModel();
         }
     }
 }

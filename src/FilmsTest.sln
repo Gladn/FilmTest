@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmsTest", "FilmsTest\FilmsTest.csproj", "{52E5A5E3-A09F-4029-929E-84A07D3F736B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmsTest", "FilmsTest\FilmsTest.csproj", "{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,17 +11,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52E5A5E3-A09F-4029-929E-84A07D3F736B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEA0EDD-D754-4F67-9D9D-3D14ECCCD813}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C76FA41A-024F-4EDD-8AC2-1F1331066F8B}
+		SolutionGuid = {B6830276-22FE-4534-AD26-690DE92DFCF7}
 	EndGlobalSection
 EndGlobal

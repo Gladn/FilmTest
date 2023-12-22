@@ -4,9 +4,9 @@ namespace FilmsTest.View;
 
 public partial class FilmDetailsPage : ContentPage
 {
-	public FilmDetailsPage(FilmDetailsViewModel viewModel)
+    public FilmDetailsPage(FilmDetailsViewModel viewModel)
     {
-		InitializeComponent();
-		BindingContext = viewModel;
-    }    
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 }

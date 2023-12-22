@@ -1,17 +1,16 @@
 ﻿using FilmsTest.Model;
 using FilmsTest.Model.DBContext;
+using FilmsTest.Service;
 using FilmsTest.View;
 using FilmsTest.ViewModel.Command;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-
 namespace FilmsTest.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainSearchViewModel : ViewModelBase
     {
-
         #region Свойства для доступа к данным в базе данных
 
         private ObservableCollection<Film> _film;
@@ -48,14 +47,14 @@ namespace FilmsTest.ViewModel
             get => _actor;
             set => Set(ref _actor, value);
         }
-        
+
         #endregion
 
-
+       
 
         #region Команда первоначальной загрузки всей базы данных
 
-        private bool _startUsingControls = true;
+        private bool _startUsingControls = false;
         public bool StartUsingControls
         {
             get => _startUsingControls;
@@ -63,28 +62,23 @@ namespace FilmsTest.ViewModel
         }
 
         public ICommand CreateDatabaseCommand { get; }
-        
+
         private bool CanCreateDatabaseCommandExecute(object? parameter) => true;
         private async Task OnCreateDatabaseCommandExecuted(object? parameter)
         {
-            await CreateDatabase();            
-        }
-        
+            await CreateDatabase();
+			StartUsingControls = true;
+		}
+
         private async Task CreateDatabase()
         {
             try
             {
                 using (var context = new ApplicationContext())
                 {
-                    #region DEBUG
-                    //await context.Database.EnsureDeletedAsync();
-                    #endregion
-                    
-                    if (context.Database != null)
-                    {
-                        await context.Database.EnsureCreatedAsync();
-                    }
-                    
+
+                    await context.Database.EnsureCreatedAsync();
+
 
 
                     #region Дефолт информация Фильмы
@@ -115,12 +109,13 @@ namespace FilmsTest.ViewModel
                     #endregion
 
 
+
                     #region Дефолт информация Жанры
 
                     if (!context.Genres.Any())
                     {
                         var genres = new List<Genre>
-                    {                       
+                    {
                         new Genre { GenID = 1, GenName = "драма" },
                         new Genre { GenID = 2, GenName = "детектив" },
                         new Genre { GenID = 3, GenName = "боевик" },
@@ -134,11 +129,12 @@ namespace FilmsTest.ViewModel
                         new Genre { GenID = 11, GenName = "Новый жанр 1" },
                         new Genre { GenID = -1, GenName = "Отмена" }
                     };
-                        
+
                         context.Genres.AddRange(genres);
                         await context.SaveChangesAsync();
                     }
                     #endregion                 
+
 
 
                     #region Дефолт информация Фильмы-Жанры
@@ -197,6 +193,7 @@ namespace FilmsTest.ViewModel
                     #endregion
 
 
+
                     #region Дефолт информация Актеры
 
                     if (!context.Actors.Any())
@@ -242,6 +239,7 @@ namespace FilmsTest.ViewModel
                         await context.SaveChangesAsync();
                     }
                     #endregion
+
 
 
                     #region Дефолт информация Фильмы-Актеры
@@ -293,7 +291,7 @@ namespace FilmsTest.ViewModel
                             new FilmActor { FmID = 12, ActID = 18 },
                             new FilmActor { FmID = 12, ActID = 19 },
                             new FilmActor { FmID = 12, ActID = 20 },
-                            
+
                             new FilmActor { FmID = 13, ActID = 31 },
                             new FilmActor { FmID = 13, ActID = 32 },
                             new FilmActor { FmID = 13, ActID = 33 },
@@ -319,16 +317,17 @@ namespace FilmsTest.ViewModel
                     }
                     #endregion
 
+
+
                     Films = new ObservableCollection<Film>(await context.Films.ToListAsync());
                     FilmsFiltered = new ObservableCollection<Film>(Films);
                     Genres = new ObservableCollection<Genre>(await context.Genres.ToListAsync());
                     FilmGenres = new ObservableCollection<FilmGenre>(await context.FilmGenres.ToListAsync());
                     Actors = new ObservableCollection<Actor>(await context.Actors.ToListAsync());
                     FilmActors = new ObservableCollection<FilmActor>(await context.FilmActors.ToListAsync());
-                    StartUsingControls = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -342,7 +341,7 @@ namespace FilmsTest.ViewModel
 
 
         #region Команда для загрузки/обновления
-      
+
         public ICommand LoadFilmDataCommand { get; }
         private bool CanFilmDataLoadCommandExecute(object? parameter) => true;
         private async Task OnFilmDataLoadCommandExecuted(object? parameter)
@@ -375,11 +374,10 @@ namespace FilmsTest.ViewModel
             set => Set(ref _filmsFilter, value);
         }
 
-
         private Genre? _selectedGenre;
         public Genre? SelectedGenre
         {
-            get => _selectedGenre;            
+            get => _selectedGenre;
             set
             {
                 _selectedGenre = value;
@@ -423,7 +421,7 @@ namespace FilmsTest.ViewModel
                         join filmActor in FilmActors on film.FmID equals filmActor.FmID
                         join actor in Actors on filmActor.ActID equals actor.ActID
                         select new { Film = film, Genre = genre, Actor = actor };
-            
+
             if (!string.IsNullOrEmpty(FilmFilterTitle))
             {
                 query = query.Where(entry => entry.Film.FmTitle.Contains(FilmFilterTitle, StringComparison.OrdinalIgnoreCase));
@@ -433,7 +431,7 @@ namespace FilmsTest.ViewModel
             {
                 SelectedGenre = null;
             }
-             
+
             if (SelectedGenre != null)
             {
                 query = query.Where(entry => entry.Genre.GenName == SelectedGenre.GenName);
@@ -462,9 +460,26 @@ namespace FilmsTest.ViewModel
 
         public async Task GotoDetailFilm(Film film, ObservableCollection<Actor> selectedFilmActors, ObservableCollection<Genre> selectedFilmGenres)
         {
-            Application.Current.MainPage.Navigation.PushAsync(new FilmDetailsPage(
-                                            new FilmDetailsViewModel(film, selectedFilmActors, selectedFilmGenres)));                  
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(() =>
+                {
+                    Application.Current.MainPage.Navigation.PushAsync(new FilmDetailsPage(new FilmDetailsViewModel(film, selectedFilmActors, selectedFilmGenres)));
+                });
+               
+                //TODO Тут был DI
+
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage.DisplayAlert("Уведомление", $"Ошибка перехода. Код ошибки: {ex.Message}", "OK");
+                });
+            }
+
         }
+
 
 
         #region Актеры и жанры выбранного фильма для отображения        
@@ -520,7 +535,7 @@ namespace FilmsTest.ViewModel
 
 
 
-        public MainViewModel()
+        public MainSearchViewModel()
         {
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
@@ -529,4 +544,5 @@ namespace FilmsTest.ViewModel
             GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
         }
     }
+
 }

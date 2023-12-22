@@ -38,14 +38,16 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <AndroidKeyStore>False</AndroidKeyStore>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+	  <DebugSymbols>False</DebugSymbols>
+	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <PublishTrimmed>True</PublishTrimmed>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <AndroidKeyStore>False</AndroidKeyStore>
-	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <DebugSymbols>True</DebugSymbols>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	  <DebugSymbols>False</DebugSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -68,12 +70,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.10" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.3" />
 		<PackageReference Include="SQLite" Version="3.13.0" />
 	</ItemGroup>
 
@@ -89,9 +90,4 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Service\" />
-	</ItemGroup>
-
- 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
-using FilmsTest.View;
+
 
 namespace FilmsTest
 {
@@ -17,7 +17,6 @@ namespace FilmsTest
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            //builder.Services.AddTransient<FilmDetailsPage>();
             return builder.Build();
         }
     }

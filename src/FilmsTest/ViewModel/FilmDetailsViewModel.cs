@@ -6,7 +6,7 @@ namespace FilmsTest.ViewModel
 {
     public class FilmDetailsViewModel : ViewModelBase
     {
-          
+
         private Film _selectedFilm;
         public Film SelectedFilm
         {
@@ -38,6 +38,6 @@ namespace FilmsTest.ViewModel
             SelectedFilmActors = selectedFilmActors;
 
             SelectedFilmGenres = selectedFilmGenres;
-        }         
+        }
     }
 }

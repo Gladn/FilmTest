@@ -7,7 +7,7 @@ namespace FilmsTest
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("MainSearchPage", typeof(MainSearchPage));
+            Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("FilmDetailsPage", typeof(FilmDetailsPage));
         }
     }
