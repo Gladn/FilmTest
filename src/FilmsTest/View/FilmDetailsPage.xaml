@@ -4,51 +4,59 @@
              x:Class="FilmsTest.View.FilmDetailsPage"
              Shell.BackgroundColor="LightBlue"
              Title="Детали фильма" >
-    
-    
-    <VerticalStackLayout>
-        <StackLayout>
+
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
             <Label Text="{Binding SelectedFilm.FmTitle}" 
-                   FontSize="Title" 
-                   Margin="10" />
-        </StackLayout>
+           FontSize="Title" 
+           Margin="10" 
+           Grid.Row="0"/>
 
-        <Label FontSize="15"
-               Text="Актеры: " 
-               Margin="10"/>
+            <Label Text="Актеры: "
+           FontSize="15"
+           Margin="10"
+           Grid.Row="1"/>
 
-        <Grid>
-            <CollectionView SelectionMode="None" 
-                            ItemsSource="{Binding SelectedFilmActors}" 
-                            Grid.Column="0"
-                            Margin="10">        
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding ActName}" Margin="10"/>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <Grid Grid.Row="2">
+                <CollectionView SelectionMode="None" 
+                        ItemsSource="{Binding SelectedFilmActors}" 
+                        Margin="10" >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding ActName}" Margin="10"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <Label Text="Жанры: " 
+           FontSize="15"
+           Margin="10"  
+           Grid.Row="3"/>
+
+            <ScrollView  Grid.Row="4">
+                <CollectionView SelectionMode="None" 
+                        ItemsSource="{Binding SelectedFilmGenres}" 
+                        Margin="10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding GenName}" Margin="10"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
         </Grid>
-
-        <Label Text="Жанры: " FontSize="15"
-               Margin="10"/>
-
-        <Grid>
-            <CollectionView SelectionMode="None" 
-                            ItemsSource="{Binding SelectedFilmGenres}" 
-                            Grid.Column="0"
-                            Margin="10">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding GenName}" Margin="10"/>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
