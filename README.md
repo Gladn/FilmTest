@@ -68,7 +68,7 @@
 
 
 
-Вот так выглядит на моем android 13
+Пример использования на физическом android 13
 
 
 ![Screenshot_10](https://github.com/Gladn/FilmTest/assets/92585647/ac35d822-8ce6-4e2a-b267-07554f74b571)
