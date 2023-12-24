@@ -56,10 +56,19 @@
 
 
 .
+
+
 ![Screenshot_9](https://github.com/Gladn/FilmTest/assets/92585647/af6d4078-20ea-4d31-b36c-fd11035e30e6)
 
 
 
 # Порядок развертывания
 
-Скачать и установить Films.apk
+**Скачать и установить Films.apk**
+
+
+
+Вот так выглядит на моем android 13
+
+
+![Screenshot_10](https://github.com/Gladn/FilmTest/assets/92585647/ac35d822-8ce6-4e2a-b267-07554f74b571)
