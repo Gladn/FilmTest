@@ -67,8 +67,8 @@ namespace FilmsTest.ViewModel
         private async Task OnCreateDatabaseCommandExecuted(object? parameter)
         {
             await CreateDatabase();
-			StartUsingControls = true;
-		}
+            StartUsingControls = true;
+        }
 
         private async Task CreateDatabase()
         {
@@ -462,13 +462,10 @@ namespace FilmsTest.ViewModel
         {
             try
             {
-                await Device.InvokeOnMainThreadAsync(() =>
-                {
-                    Application.Current.MainPage.Navigation.PushAsync(new FilmDetailsPage(new FilmDetailsViewModel(film, selectedFilmActors, selectedFilmGenres)));
-                });
-               
-                //TODO Тут был DI
+                var navigationService = new NavigationService();
+                var filmDetailsPage = new FilmDetailsPage(new FilmDetailsViewModel(film, selectedFilmActors, selectedFilmGenres));
 
+                await navigationService.NavigateToPage(filmDetailsPage);
             }
             catch (Exception ex)
             {
@@ -477,7 +474,6 @@ namespace FilmsTest.ViewModel
                     Application.Current.MainPage.DisplayAlert("Уведомление", $"Ошибка перехода. Код ошибки: {ex.Message}", "OK");
                 });
             }
-
         }
 
 
