@@ -1,5 +1,6 @@
 ﻿using FilmsTest.Model;
 using FilmsTest.Model.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmsTest.Service
 {
@@ -15,12 +16,11 @@ namespace FilmsTest.Service
         {
             using (var context = new ApplicationContext())
             {
-                var query = from film in context.Films
-                            join filmGenre in context.FilmGenres on film.FmID equals filmGenre.FmID
-                            join genre in context.Genres on filmGenre.GenID equals genre.GenID
-                            join filmActor in context.FilmActors on film.FmID equals filmActor.FmID
-                            join actor in context.Actors on filmActor.ActID equals actor.ActID
-                            select new { Film = film, Genre = genre, Actor = actor };
+                var sqlQuery = "SELECT DISTINCT Films.* FROM Films " +
+                       "JOIN FilmGenres ON Films.FmID = FilmGenres.FmID " +
+                       "JOIN Genres ON FilmGenres.GenID = Genres.GenID " +
+                       "JOIN FilmActors ON Films.FmID = FilmActors.FmID " +
+                       "JOIN Actors ON FilmActors.ActID = Actors.ActID " ;
 
                 if (selectedGenre != null && selectedGenre.GenID == -1)
                 {
@@ -29,22 +29,21 @@ namespace FilmsTest.Service
 
                 if (selectedGenre != null)
                 {
-                    query = query.Where(entry => entry.Genre.GenName == selectedGenre.GenName);
+                    sqlQuery += $"AND Genres.GenName = '{selectedGenre.GenName}' ";
                 }
-
 
                 if (!string.IsNullOrEmpty(titleFilter))
                 {
-                    query = query.Where(entry => entry.Film.FmTitle.Contains(titleFilter));
+                    sqlQuery += $"AND Films.FmTitle LIKE '%{titleFilter}%' ";
                 }
-
 
                 if (!string.IsNullOrEmpty(actorFilter))
                 {
-                    query = query.Where(entry => entry.Actor.ActName.Contains(actorFilter));
+                    sqlQuery += $"AND Actors.ActName LIKE '%{actorFilter}%' ";
                 }
 
-                return query.Select(entry => entry.Film).Distinct().ToList();
+                var films = context.Films.FromSqlRaw(sqlQuery).ToList();
+                return films;
             }
         }
     }

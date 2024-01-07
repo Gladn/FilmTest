@@ -11,10 +11,10 @@ using System.Windows.Input;
 
 
 //Пометки от тех спеца:
-//1) Вынести бизнес-логику в отдельный слой 
-//2) Вью-модель не должна знать о бизнес-сущностях и существовании дата-контекста 
+//1) Вынести бизнес-логику в отдельный слой (FilmsFilterService)
+//2) Вью-модель не должна знать о бизнес-сущностях (DTO?) и существовании дата-контекста (IDatabaseService) 
 //3) View не должны знать о слоях ниже вью-модели 
-//4) Отдельно предоставить SQL-запрос поиска, в само приложение не встраивать
+//4) Отдельно предоставить SQL-запрос поиска, в само приложение не встраивать (procedure?)
 
 
 
@@ -31,18 +31,19 @@ namespace FilmsTest.ViewModel
 
         private readonly IDatabaseService databaseService;
         private readonly IFilmsFilterService filmsfilterService;
-       // private readonly IFilmDetailsService filmDetailsService;
+        private readonly IFilmDetailsService filmDetailsService;
 
 
         public MainSearchViewModel(IDatabaseService databaseService, IFilmsFilterService filmsfilterService)
         {
             this.databaseService = databaseService;
             this.filmsfilterService = filmsfilterService;
-           // this.filmDetailsService = filmDetailsService;
+            
 
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
-            GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);            
+            GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
+ 
         }
 
 
@@ -212,16 +213,25 @@ namespace FilmsTest.ViewModel
             }
         }
 
-        //private void ApplyFilmInfoFilter()
-        //{
-        //    GenresFiltered = new ObservableCollection<Genre>(filmDetailsService.GetFilteredGenres(SelectedFilm));
-        //    ActorsFiltered = new ObservableCollection<Actor>(filmDetailsService.GetFilteredActors(SelectedFilm));
-        //}
-
         private void ApplyFilmInfoFilter()
         {
-            //filmDetailsService.ApplyFilmInfoFilter(SelectedFilm, GenresFiltered, ActorsFiltered);
+            var query = from film in Films
+                        join filmGenre in FilmGenres on film.FmID equals filmGenre.FmID
+                        join genre in Genres on filmGenre.GenID equals genre.GenID
+                        join filmActor in FilmActors on film.FmID equals filmActor.FmID
+                        join actor in Actors on filmActor.ActID equals actor.ActID
+                        select new { Film = film, Genre = genre, Actor = actor };
+
+
+            if (SelectedFilm != null)
+            {
+                query = query.Where(entry => entry.Film.FmID == SelectedFilm.FmID);
+            }
+
+            GenresFiltered = new ObservableCollection<Genre>(query.Select(entry => entry.Genre).Distinct());
+            ActorsFiltered = new ObservableCollection<Actor>(query.Select(entry => entry.Actor).Distinct());
         }
+
         #endregion
 
         #endregion

@@ -108,23 +108,31 @@
                         Margin="10">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
+                    <Frame HeightRequest="75" >
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                    Command="{Binding GotoDetailFilmCommand}"
+                                    CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
 
-                        <VerticalStackLayout>
-                            <Label Text="{Binding FmTitle}" />
-                            <Label Text="{Binding FmYear}" Margin="0,0,0,10" />
+                        <Grid>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding FmTitle}" />
+                                <Label Text="{Binding FmYear}" Margin="0,0,0,10" />
 
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <VisualState Name="Normal"></VisualState>
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="LightSkyBlue"></Setter>
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </VerticalStackLayout>
-          
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal"></VisualState>
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="LightSkyBlue"></Setter>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

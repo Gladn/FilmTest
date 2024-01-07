@@ -23,15 +23,13 @@ namespace FilmsTest
 
 #endif
 
-
-
-
             builder.Services.AddSingleton<MainSearchViewModel>();
             builder.Services.AddSingleton<MainPage>();
 
             builder.Services.AddScoped<IDatabaseService, DatabaseService>();
             builder.Services.AddScoped<IFilmsFilterService, FilmsFilterService>();
-            //services.AddScoped<IDatabaseService, DatabaseService>();
+           // builder.Services.AddScoped<IFilmDetailsService, FilmDetailsService>();
+
 
             return builder.Build();
         }
