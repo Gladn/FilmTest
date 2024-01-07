@@ -31,15 +31,18 @@ namespace FilmsTest.ViewModel
 
         private readonly IDatabaseService databaseService;
         private readonly IFilmsFilterService filmsfilterService;
+       // private readonly IFilmDetailsService filmDetailsService;
+
 
         public MainSearchViewModel(IDatabaseService databaseService, IFilmsFilterService filmsfilterService)
         {
             this.databaseService = databaseService;
             this.filmsfilterService = filmsfilterService;
+           // this.filmDetailsService = filmDetailsService;
 
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
-            GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
+            GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);            
         }
 
 
@@ -76,8 +79,7 @@ namespace FilmsTest.ViewModel
             var filmgenres = await databaseService.GetFilmGenresAsync();
                 foreach (var filmgenre in filmgenres)
                     FilmGenres.Add(filmgenre);
-
-            FilmsFiltered = new ObservableCollection<Film>(Films);
+            
 
             var actors = await databaseService.GetActorsAsync();
                 foreach (var actor in actors)
@@ -87,14 +89,11 @@ namespace FilmsTest.ViewModel
             var filmactors = await databaseService.GetFilmActorsAsync();
                 foreach (var filmactor in filmactors)
                     FilmActors.Add(filmactor);
+
+            FilmsFiltered = new ObservableCollection<Film>(Films);
         }
 
         #endregion
-
-
-
-
-
 
 
 
@@ -105,13 +104,14 @@ namespace FilmsTest.ViewModel
         public ObservableCollection<Film> FilmsFiltered
         {
             get => filmsFiltered;
-            set =>  Set(ref filmsFiltered, value);
+            set => Set(ref filmsFiltered, value);
         }
+
 
         private async Task ApplyFilter()
         {
             FilmsFiltered = new ObservableCollection<Film>(
-                await filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
+                filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
             );
         }
 
@@ -154,6 +154,7 @@ namespace FilmsTest.ViewModel
         }       
 
         #endregion
+
 
 
 
@@ -211,25 +212,16 @@ namespace FilmsTest.ViewModel
             }
         }
 
+        //private void ApplyFilmInfoFilter()
+        //{
+        //    GenresFiltered = new ObservableCollection<Genre>(filmDetailsService.GetFilteredGenres(SelectedFilm));
+        //    ActorsFiltered = new ObservableCollection<Actor>(filmDetailsService.GetFilteredActors(SelectedFilm));
+        //}
+
         private void ApplyFilmInfoFilter()
         {
-            var query = from film in Films
-                        join filmGenre in FilmGenres on film.FmID equals filmGenre.FmID
-                        join genre in Genres on filmGenre.GenID equals genre.GenID
-                        join filmActor in FilmActors on film.FmID equals filmActor.FmID
-                        join actor in Actors on filmActor.ActID equals actor.ActID
-                        select new { Film = film, Genre = genre, Actor = actor };
-
-
-            if (SelectedFilm != null)
-            {
-                query = query.Where(entry => entry.Film.FmID == SelectedFilm.FmID);
-            }
-
-            GenresFiltered = new ObservableCollection<Genre>(query.Select(entry => entry.Genre).Distinct());
-            ActorsFiltered = new ObservableCollection<Actor>(query.Select(entry => entry.Actor).Distinct());
+            //filmDetailsService.ApplyFilmInfoFilter(SelectedFilm, GenresFiltered, ActorsFiltered);
         }
-
         #endregion
 
         #endregion

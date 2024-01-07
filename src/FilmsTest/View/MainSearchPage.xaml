@@ -101,7 +101,7 @@
         </VerticalStackLayout>
 
         <CollectionView SelectionMode="Single" 
-                        ItemsSource="{Binding Films}" 
+                        ItemsSource="{Binding FilmsFiltered}" 
                         SelectedItem="{Binding SelectedFilm}"    
                         SelectionChangedCommand="{Binding GotoDetailFilmCommand}"
                         Grid.Row="2"

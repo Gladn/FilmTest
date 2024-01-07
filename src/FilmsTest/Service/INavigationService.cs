@@ -15,5 +15,4 @@ namespace FilmsTest.Service
             await Application.Current.MainPage.Navigation.PushAsync(page);           
         }
     }
-
 }
