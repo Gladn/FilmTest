@@ -2,10 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:data="clr-namespace:FilmsTest.ViewModel" 
              x:Class="FilmsTest.MainPage"
-             Shell.BackgroundColor="LightBlue"
+             Shell.BackgroundColor="LightGray"
              Title="Поиск фильма">
-
+   
+    <!--<ContentPage.BindingContext>
+        <data:MainSearchViewModel x:Name="MainSearchViewModel"/>
+    </ContentPage.BindingContext>-->
+       
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,8 +34,9 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Label  Text="Доп критерии поиска "  
-                                HorizontalOptions="EndAndExpand" 
+                        <Label  Text="Доп критерии поиска  "  
+                                HorizontalOptions="EndAndExpand"          
+                                TextColor="Black"
                                 FontSize="10" 
                                 FontAttributes="Bold" 
                                 Grid.Column="0"/>
@@ -95,7 +101,7 @@
         </VerticalStackLayout>
 
         <CollectionView SelectionMode="Single" 
-                        ItemsSource="{Binding FilmsFiltered}" 
+                        ItemsSource="{Binding Films}" 
                         SelectedItem="{Binding SelectedFilm}"    
                         SelectionChangedCommand="{Binding GotoDetailFilmCommand}"
                         Grid.Row="2"

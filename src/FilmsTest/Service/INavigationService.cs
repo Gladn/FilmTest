@@ -12,10 +12,7 @@ namespace FilmsTest.Service
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public async Task NavigateToPage(Page page)
         {
-            await Device.InvokeOnMainThreadAsync(() =>
-            {
-                Application.Current.MainPage.Navigation.PushAsync(page);
-            });
+            await Application.Current.MainPage.Navigation.PushAsync(page);           
         }
     }
 
