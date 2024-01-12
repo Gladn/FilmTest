@@ -10,14 +10,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 
 
-//Пометки от тех спеца:
-//1) Вынести бизнес-логику в отдельный слой (FilmsFilterService)
-//2) Вью-модель не должна знать о бизнес-сущностях (DTO?) и существовании дата-контекста (IDatabaseService) 
-//3) View не должны знать о слоях ниже вью-модели 
-//4) Отдельно предоставить SQL-запрос поиска, в само приложение не встраивать (procedure?)
-
-
-
 namespace FilmsTest.ViewModel
 {
     public class MainSearchViewModel : ViewModelBase
