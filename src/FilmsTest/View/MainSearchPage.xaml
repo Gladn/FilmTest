@@ -22,7 +22,7 @@
         <Entry Placeholder="Введите название фильма"
               Text="{Binding FilmFilterTitle}"
               VerticalOptions="Start"
-              IsEnabled="{Binding StartUsingControls}"
+              IsEnabled="{Binding StartUsingSearchControls}"
               Grid.Row="0"
               Margin="10"/>
 
@@ -83,14 +83,14 @@
                             <Picker ItemsSource="{Binding Genres}"
                                    ItemDisplayBinding="{Binding GenName}"                                             
                                    SelectedItem="{Binding SelectedGenre}"
-                                   IsEnabled="{Binding StartUsingControls}"
+                                   IsEnabled="{Binding StartUsingSearchControls}"
                                    Grid.Row="0"
                                    Grid.Column="1"
                                    Margin="5" />
 
                             <Entry Placeholder="Введите актера"
                                   Text="{Binding FilmFilterActor}"   
-                                  IsEnabled="{Binding StartUsingControls}"
+                                  IsEnabled="{Binding StartUsingSearchControls}"
                                   Grid.Row="1"
                                   Grid.Column="1"
                                   Margin="5"/>
@@ -101,19 +101,20 @@
         </VerticalStackLayout>
 
         <CollectionView SelectionMode="Single" 
-                        ItemsSource="{Binding FilmsFiltered}" 
-                        SelectedItem="{Binding SelectedFilm}"    
-                        SelectionChangedCommand="{Binding GotoDetailFilmCommand}"
-                        Grid.Row="2"
-                        Margin="10">
+                ItemsSource="{Binding FilmsFiltered}" 
+                SelectedItem="{Binding SelectedFilm}"    
+                        
+                Grid.Row="2"
+                Margin="10">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame HeightRequest="75" >
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 
-                                    Command="{Binding GotoDetailFilmCommand}"
-                                    CommandParameter="{Binding .}"/>
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type data:MainSearchViewModel}}, Path=GotoDetailFilmCommand}"
+                            CommandParameter="{Binding .}"/>
                         </Frame.GestureRecognizers>
+
 
                         <Grid>
                             <VerticalStackLayout>
@@ -138,10 +139,14 @@
         </CollectionView>
 
 
-        
+
+
 
         <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="3" Margin="10">
-            <Button Text="Загрузить базу" HorizontalOptions="FillAndExpand" Command="{Binding CreateDatabaseCommand}" />
+            <Button Text="Загрузить базу" HorizontalOptions="FillAndExpand" 
+                    IsEnabled="{Binding TurnOffDatabaseButton}" 
+                    IsVisible="{Binding TurnOffDatabaseButton}" 
+                    Command="{Binding CreateDatabaseCommand}" />
         </StackLayout>
 
     </Grid>

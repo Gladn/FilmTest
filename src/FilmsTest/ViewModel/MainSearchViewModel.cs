@@ -1,13 +1,11 @@
 ﻿using FilmsTest.DTOs;
 using FilmsTest.Model;
-using FilmsTest.Model.DBContext;
 using FilmsTest.Service;
 using FilmsTest.View;
 using FilmsTest.ViewModel.Command;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+
 
 
 namespace FilmsTest.ViewModel
@@ -42,16 +40,20 @@ namespace FilmsTest.ViewModel
 
         #region Команда загрузки всей базы данных
 
-        private bool _startUsingControls = false;
-        public bool StartUsingControls { get => _startUsingControls; set => Set(ref _startUsingControls, value); }
+        private bool _startUsingSearchControls = false;
+        public bool StartUsingSearchControls { get => _startUsingSearchControls; set => Set(ref _startUsingSearchControls, value); }
 
+        private bool _turnOffDatabaseButton = true;
+        public bool TurnOffDatabaseButton { get => _turnOffDatabaseButton; set => Set(ref _turnOffDatabaseButton, value); }
 
         public ICommand CreateDatabaseCommand { get; }
 
         private bool CanCreateDatabaseCommandExecute(object? parameter) => true;
         private async Task OnCreateDatabaseCommandExecuted(object? parameter)
         {
-            StartUsingControls = true;
+            StartUsingSearchControls = true;
+            TurnOffDatabaseButton = false;
+
             await CreateDatabaseAsync();
         }
         
