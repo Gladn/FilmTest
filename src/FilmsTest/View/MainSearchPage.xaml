@@ -103,14 +103,22 @@
         <CollectionView SelectionMode="Single" 
                 ItemsSource="{Binding FilmsFiltered}"                       
                 SelectedItem="{Binding SelectedFilm}"    
+                SelectionChangedCommand="{Binding GotoDetailFilmCommand}"
                 Grid.Row="2"
                 Margin="10">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ContentView BackgroundColor="Silver">
-                        <Frame>
-                            <VisualStateManager.VisualStateGroups>
+
+                    <ContentView HeightRequest="75" BackgroundColor="Silver" Margin="0,0,0,5">
+
+                        <!--<Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type data:MainSearchViewModel}}, Path=GotoDetailFilmCommand}"
+                                CommandParameter="{Binding .}"/>        
+                        </Frame.GestureRecognizers>-->
+
+                        <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="Normal"></VisualState>
                                 <VisualState Name="Selected">
@@ -121,20 +129,16 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type data:MainSearchViewModel}}, Path=GotoDetailFilmCommand}"
-                                CommandParameter="{Binding .}"/>
-                        </Frame.GestureRecognizers>
 
-                  
-                            <VerticalStackLayout>
-                                <Label Text="{Binding FmTitle}" TextColor="Black" />
-                                <Label Text="{Binding FmYear}" Margin="0,0,0,10" TextColor="Black" />
-                            </VerticalStackLayout>
+
+
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="{Binding FmTitle}" Margin="5,5,0,0" TextColor="Black" />
+                                <Label Text="{Binding FmYear}" Margin="5,5,0,5" TextColor="Black" />
+                        </VerticalStackLayout>
                  
-                        </Frame>
-                    </ContentView>
+                        </ContentView>
+              
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
