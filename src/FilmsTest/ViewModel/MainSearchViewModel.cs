@@ -12,11 +12,11 @@ namespace FilmsTest.ViewModel
 {
     public class MainSearchViewModel : ViewModelBase
     {
-        public ObservableCollection<Film> Films { get; } = new();
-        public ObservableCollection<Genre> Genres { get; } = new();
-        public ObservableCollection<FilmGenre> FilmGenres { get; } = new();
-        public ObservableCollection<Actor> Actors { get; } = new();
-        public ObservableCollection<FilmActor> FilmActors { get; } = new();
+        public ObservableCollection<FilmDTO> Films { get; } = new();
+        public ObservableCollection<GenreDTO> Genres { get; } = new();
+        public ObservableCollection<FilmGenreDTO> FilmGenres { get; } = new();
+        public ObservableCollection<ActorDTO> Actors { get; } = new();
+        public ObservableCollection<FilmActorDTO> FilmActors { get; } = new();
 
 
         private readonly IDatabaseService databaseService;
@@ -33,7 +33,6 @@ namespace FilmsTest.ViewModel
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
             GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
- 
         }
 
 
@@ -62,30 +61,30 @@ namespace FilmsTest.ViewModel
             await databaseService.CreateDatabaseAsync();
 
             var films = await databaseService.GetFilmsAsync();
-                foreach (var film in films)
-                    Films.Add(film);
+            foreach (var film in films)
+                Films.Add(film);
 
 
             var genres = await databaseService.GetGenresAsync();
-                foreach (var genre in genres)
-                    Genres.Add(genre);
+            foreach (var genre in genres)
+                Genres.Add(genre);
 
 
             var filmgenres = await databaseService.GetFilmGenresAsync();
-                foreach (var filmgenre in filmgenres)
-                    FilmGenres.Add(filmgenre);
-            
+            foreach (var filmgenre in filmgenres)
+                FilmGenres.Add(filmgenre);
+
 
             var actors = await databaseService.GetActorsAsync();
-                foreach (var actor in actors)
-                    Actors.Add(actor);
+            foreach (var actor in actors)
+                Actors.Add(actor);
 
 
             var filmactors = await databaseService.GetFilmActorsAsync();
-                foreach (var filmactor in filmactors)
-                    FilmActors.Add(filmactor);
+            foreach (var filmactor in filmactors)
+                FilmActors.Add(filmactor);
 
-            FilmsFiltered = new ObservableCollection<Film>(Films);
+            FilmsFiltered = new ObservableCollection<FilmDTO>(Films);
         }
 
         #endregion
@@ -95,8 +94,8 @@ namespace FilmsTest.ViewModel
 
         #region Фильтрация фильмов по критериям
 
-        private ObservableCollection<Film> filmsFiltered;
-        public ObservableCollection<Film> FilmsFiltered
+        private ObservableCollection<FilmDTO> filmsFiltered;
+        public ObservableCollection<FilmDTO> FilmsFiltered
         {
             get => filmsFiltered;
             set => Set(ref filmsFiltered, value);
@@ -105,9 +104,9 @@ namespace FilmsTest.ViewModel
 
         private async Task ApplyFilter()
         {
-            FilmsFiltered = new ObservableCollection<Film>(
-                filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
-            );
+            //FilmsFiltered = new ObservableCollection<FilmDTO>(
+            //    filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
+            //);
         }
 
         private Genre? _selectedGenre;
@@ -162,7 +161,7 @@ namespace FilmsTest.ViewModel
             await GotoDetailFilm(SelectedFilm, ActorsFiltered, GenresFiltered);
         }
 
-        public async Task GotoDetailFilm(Film film, ObservableCollection<Actor> selectedFilmActors, ObservableCollection<Genre> selectedFilmGenres)
+        public async Task GotoDetailFilm(FilmDTO film, ObservableCollection<ActorDTO> selectedFilmActors, ObservableCollection<GenreDTO> selectedFilmGenres)
         {
             try
             {
@@ -181,22 +180,22 @@ namespace FilmsTest.ViewModel
 
         #region Актеры и жанры выбранного фильма для отображения        
 
-        private ObservableCollection<Actor> _actorsFilter;
-        public ObservableCollection<Actor> ActorsFiltered
+        private ObservableCollection<ActorDTO> _actorsFilter;
+        public ObservableCollection<ActorDTO> ActorsFiltered
         {
             get => _actorsFilter;
             set => Set(ref _actorsFilter, value);
         }
 
-        private ObservableCollection<Genre> _genresFilter;
-        public ObservableCollection<Genre> GenresFiltered
+        private ObservableCollection<GenreDTO> _genresFilter;
+        public ObservableCollection<GenreDTO> GenresFiltered
         {
             get => _genresFilter;
             set => Set(ref _genresFilter, value);
         }
 
-        private Film _selectedFilm;
-        public Film SelectedFilm
+        private FilmDTO _selectedFilm;
+        public FilmDTO SelectedFilm
         {
             get => _selectedFilm;
             set
@@ -222,8 +221,8 @@ namespace FilmsTest.ViewModel
                 query = query.Where(entry => entry.Film.FmID == SelectedFilm.FmID);
             }
 
-            GenresFiltered = new ObservableCollection<Genre>(query.Select(entry => entry.Genre).Distinct());
-            ActorsFiltered = new ObservableCollection<Actor>(query.Select(entry => entry.Actor).Distinct());
+            GenresFiltered = new ObservableCollection<GenreDTO>(query.Select(entry => entry.Genre).Distinct());
+            ActorsFiltered = new ObservableCollection<ActorDTO>(query.Select(entry => entry.Actor).Distinct());
         }
 
         #endregion

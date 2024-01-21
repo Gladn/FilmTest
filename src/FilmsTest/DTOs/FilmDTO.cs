@@ -1,4 +1,6 @@
-﻿namespace FilmsTest.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FilmsTest.DTOs
 {
     public class FilmDTO
     {

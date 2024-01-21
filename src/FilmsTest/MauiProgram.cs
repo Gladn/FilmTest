@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui;
 using FilmsTest.Service;
 using FilmsTest.ViewModel;
+using AutoMapper;
 
 
 namespace FilmsTest
@@ -28,8 +29,13 @@ namespace FilmsTest
 
             builder.Services.AddScoped<IDatabaseService, DatabaseService>();
             builder.Services.AddScoped<IFilmsFilterService, FilmsFilterService>();
-           // builder.Services.AddScoped<IFilmDetailsService, FilmDetailsService>();
 
+            //builder.Services.AddScoped<IFilmDetailsService, FilmDetailsService>();
+
+
+            builder.Services.AddAutoMapper(typeof(DatabaseService));
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return builder.Build();
         }

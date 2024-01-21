@@ -1,4 +1,6 @@
-﻿using FilmsTest.Model;
+﻿using AutoMapper;
+using FilmsTest.DTOs;
+using FilmsTest.Model;
 using FilmsTest.Model.DBContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,16 +10,23 @@ namespace FilmsTest.Service
     {
         Task CreateDatabaseAsync();
 
-        Task<IEnumerable<Film>> GetFilmsAsync();
-        Task<IEnumerable<Genre>> GetGenresAsync();
-        Task<IEnumerable<FilmGenre>> GetFilmGenresAsync();
-        Task<IEnumerable<Actor>> GetActorsAsync();
-        Task<IEnumerable<FilmActor>> GetFilmActorsAsync();
+        Task<IEnumerable<FilmDTO>> GetFilmsAsync();
+        Task<IEnumerable<GenreDTO>> GetGenresAsync();
+        Task<IEnumerable<FilmGenreDTO>> GetFilmGenresAsync();
+        Task<IEnumerable<ActorDTO>> GetActorsAsync();
+        Task<IEnumerable<FilmActorDTO>> GetFilmActorsAsync();
     }
 
 
     public class DatabaseService : IDatabaseService
     {
+        private readonly IMapper _mapper;
+
+        public DatabaseService(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task CreateDatabaseAsync()
         {
             try
@@ -50,7 +59,7 @@ namespace FilmsTest.Service
                     new Film { FmID = 14, FmTitle = "Новый фильм 14", FmYear = 2023 }
                     };
 
-                        context.AddRange(films);
+                        await context.AddRangeAsync(films);
                         await context.SaveChangesAsync();
                     }
                     #endregion
@@ -77,7 +86,7 @@ namespace FilmsTest.Service
                         new Genre { GenID = -1, GenName = "Отмена" }
                     };
 
-                        context.Genres.AddRange(genres);
+                        await context.Genres.AddRangeAsync(genres);
                         await context.SaveChangesAsync();
                     }
                     #endregion
@@ -134,7 +143,7 @@ namespace FilmsTest.Service
                             new FilmGenre { FmID = 14, GenID = 1 }
                         };
 
-                        context.FilmGenres.AddRange(filmGenres);
+                        await context.FilmGenres.AddRangeAsync(filmGenres);
                         await context.SaveChangesAsync();
                     }
                     #endregion
@@ -182,7 +191,7 @@ namespace FilmsTest.Service
                         new Actor { ActID = 33, ActName = "Новый актер 33" }
                     };
 
-                        context.Actors.AddRange(actors);
+                        await context.Actors.AddRangeAsync(actors);
                         await context.SaveChangesAsync();
                     }
                     #endregion
@@ -259,7 +268,7 @@ namespace FilmsTest.Service
                             new FilmActor { FmID = 14, ActID = 2 },
                         };
 
-                        context.FilmActors.AddRange(filmActors);
+                        await context.FilmActors.AddRangeAsync(filmActors);
                         await context.SaveChangesAsync();
                     }
                     #endregion
@@ -273,43 +282,51 @@ namespace FilmsTest.Service
             }
         }
 
-        public async Task<IEnumerable<Film>> GetFilmsAsync()
+
+
+        public async Task<IEnumerable<FilmDTO>> GetFilmsAsync()
         {
             using (var context = new ApplicationContext())
             {
-                return await context.Films.ToListAsync();
+                //return await context.Films.ToListAsync();
+                var films = await context.Films.ToListAsync();
+                return _mapper.Map<IEnumerable<FilmDTO>>(films);
             }
         }
 
-        public async Task<IEnumerable<Genre>> GetGenresAsync()
+        public async Task<IEnumerable<GenreDTO>> GetGenresAsync()
         {
             using (var context = new ApplicationContext())
             {
-                return await context.Genres.ToListAsync();
+                var genres = await context.Genres.ToListAsync();
+                return _mapper.Map<IEnumerable<GenreDTO>>(genres);
             }
         }
 
-        public async Task<IEnumerable<FilmGenre>> GetFilmGenresAsync()
+        public async Task<IEnumerable<FilmGenreDTO>> GetFilmGenresAsync()
         {
             using (var context = new ApplicationContext())
             {
-                return await context.FilmGenres.ToListAsync();
+                var filmGenres = await context.FilmGenres.ToListAsync();
+                return _mapper.Map<IEnumerable<FilmGenreDTO>>(filmGenres);
             }
         }
 
-        public async Task<IEnumerable<Actor>> GetActorsAsync()
+        public async Task<IEnumerable<ActorDTO>> GetActorsAsync()
         {
             using (var context = new ApplicationContext())
             {
-                return await context.Actors.ToListAsync();
+                var actors = await context.Actors.ToListAsync();
+                return _mapper.Map<IEnumerable<ActorDTO>>(actors);
             }
         }
 
-        public async Task<IEnumerable<FilmActor>> GetFilmActorsAsync()
+        public async Task<IEnumerable<FilmActorDTO>> GetFilmActorsAsync()
         {
             using (var context = new ApplicationContext())
             {
-                return await context.FilmActors.ToListAsync();
+                var filmActors = await context.FilmActors.ToListAsync();
+                return _mapper.Map<IEnumerable<FilmActorDTO>>(filmActors);
             }
         }
     }

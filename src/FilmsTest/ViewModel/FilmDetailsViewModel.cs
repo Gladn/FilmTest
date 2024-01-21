@@ -1,4 +1,4 @@
-﻿using FilmsTest.Model;
+﻿using FilmsTest.DTOs;
 using System.Collections.ObjectModel;
 
 
@@ -7,31 +7,31 @@ namespace FilmsTest.ViewModel
     public class FilmDetailsViewModel : ViewModelBase
     {
 
-        private Film _selectedFilm;
-        public Film SelectedFilm
+        private FilmDTO _selectedFilm;
+        public FilmDTO SelectedFilm
         {
             get => _selectedFilm;
             set => Set(ref _selectedFilm, value);
         }
 
 
-        private ObservableCollection<Actor> _selectedFilmActor;
-        public ObservableCollection<Actor> SelectedFilmActors
+        private ObservableCollection<ActorDTO> _selectedFilmActor;
+        public ObservableCollection<ActorDTO> SelectedFilmActors
         {
             get => _selectedFilmActor;
             set => Set(ref _selectedFilmActor, value);
         }
 
 
-        private ObservableCollection<Genre> _selectedFilmGenre;
-        public ObservableCollection<Genre> SelectedFilmGenres
+        private ObservableCollection<GenreDTO> _selectedFilmGenre;
+        public ObservableCollection<GenreDTO> SelectedFilmGenres
         {
             get => _selectedFilmGenre;
             set => Set(ref _selectedFilmGenre, value);
         }
 
 
-        public FilmDetailsViewModel(Film selectedFilm, ObservableCollection<Actor> selectedFilmActors, ObservableCollection<Genre> selectedFilmGenres)
+        public FilmDetailsViewModel(FilmDTO selectedFilm, ObservableCollection<ActorDTO> selectedFilmActors, ObservableCollection<GenreDTO> selectedFilmGenres)
         {
             SelectedFilm = selectedFilm;
 
