@@ -10,7 +10,7 @@
     <!--<ContentPage.BindingContext>
         <data:MainSearchViewModel x:Name="MainSearchViewModel"/>
     </ContentPage.BindingContext>-->
-       
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,13 +40,13 @@
                                 FontSize="10" 
                                 FontAttributes="Bold" 
                                 Grid.Column="0"/>
-                        
+
                         <Image Grid.Column="1" 
                                x:Name="HeaderImage" 
                                HeightRequest="15" 
                                WidthRequest="15"  
                                Source="arrow_down.png">
-                            
+
                             <Image.Triggers>
                                 <DataTrigger TargetType="Image"
                                         Binding="{Binding Source={x:Reference MyExpander}, Path=IsExpanded}"
@@ -69,7 +69,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <Label Text="Выбор жанра:"
                                   Grid.Row="0"
                                   Grid.Column="0"
@@ -101,25 +101,23 @@
         </VerticalStackLayout>
 
         <CollectionView SelectionMode="Single" 
-                ItemsSource="{Binding Films}" 
+                ItemsSource="{Binding FilmsFiltered}" 
                 SelectedItem="{Binding SelectedFilm}"    
-                        
                 Grid.Row="2"
                 Margin="10">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame HeightRequest="75" >
+                    <Frame HeightRequest="75" BackgroundColor="Silver">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type data:MainSearchViewModel}}, Path=GotoDetailFilmCommand}"
-                            CommandParameter="{Binding .}"/>
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type data:MainSearchViewModel}}, Path=GotoDetailFilmCommand}"
+                                            CommandParameter="{Binding .}"/>
                         </Frame.GestureRecognizers>
-
-
                         <Grid>
                             <VerticalStackLayout>
-                                <Label Text="{Binding FmTitle}" />
-                                <Label Text="{Binding FmYear}" Margin="0,0,0,10" />
+                                <Label Text="{Binding FmTitle}" TextColor="Black" />
+                                <Label Text="{Binding FmYear}" Margin="0,0,0,10" TextColor="Black" />
 
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
@@ -139,16 +137,12 @@
         </CollectionView>
 
 
-
-
-
         <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="3" Margin="10">
             <Button Text="Загрузить базу" HorizontalOptions="FillAndExpand" 
                     IsEnabled="{Binding TurnOffDatabaseButton}" 
                     IsVisible="{Binding TurnOffDatabaseButton}" 
                     Command="{Binding CreateDatabaseCommand}" />
         </StackLayout>
-
+    
     </Grid>
-
 </ContentPage>
