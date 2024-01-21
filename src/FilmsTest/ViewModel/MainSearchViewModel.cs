@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 
-
 namespace FilmsTest.ViewModel
 {
     public class MainSearchViewModel : ViewModelBase
@@ -20,14 +19,13 @@ namespace FilmsTest.ViewModel
 
         private readonly IDatabaseService databaseService;
         private readonly IFilmsFilterService filmsfilterService;
-        private readonly IFilmDetailsService filmDetailsService;
 
 
         public MainSearchViewModel(IDatabaseService databaseService, IFilmsFilterService filmsfilterService)
         {
             this.databaseService = databaseService;
             this.filmsfilterService = filmsfilterService;
-            //this.filmDetailsService = filmDetailsService;
+
 
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
