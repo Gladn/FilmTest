@@ -1,5 +1,4 @@
 ﻿using FilmsTest.DTOs;
-using FilmsTest.Model;
 using FilmsTest.Service;
 using FilmsTest.View;
 using FilmsTest.ViewModel.Command;
@@ -28,7 +27,7 @@ namespace FilmsTest.ViewModel
         {
             this.databaseService = databaseService;
             this.filmsfilterService = filmsfilterService;
-            
+            //this.filmDetailsService = filmDetailsService;
 
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
@@ -104,13 +103,13 @@ namespace FilmsTest.ViewModel
 
         private async Task ApplyFilter()
         {
-            //FilmsFiltered = new ObservableCollection<FilmDTO>(
-            //    filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
-            //);
+            FilmsFiltered = new ObservableCollection<FilmDTO>(
+                filmsfilterService.FilterFilms(FilmFilterTitle, SelectedGenre, FilmFilterActor)
+            );
         }
 
-        private Genre? _selectedGenre;
-        public Genre? SelectedGenre
+        private GenreDTO? _selectedGenre;
+        public GenreDTO? SelectedGenre
         {
             get => _selectedGenre;
             set
@@ -177,9 +176,6 @@ namespace FilmsTest.ViewModel
         }
 
 
-
-        #region Актеры и жанры выбранного фильма для отображения        
-
         private ObservableCollection<ActorDTO> _actorsFilter;
         public ObservableCollection<ActorDTO> ActorsFiltered
         {
@@ -224,8 +220,6 @@ namespace FilmsTest.ViewModel
             GenresFiltered = new ObservableCollection<GenreDTO>(query.Select(entry => entry.Genre).Distinct());
             ActorsFiltered = new ObservableCollection<ActorDTO>(query.Select(entry => entry.Actor).Distinct());
         }
-
-        #endregion
 
         #endregion
     }
