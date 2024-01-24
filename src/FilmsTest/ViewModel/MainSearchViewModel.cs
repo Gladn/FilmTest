@@ -19,17 +19,23 @@ namespace FilmsTest.ViewModel
 
         private readonly IDatabaseService databaseService;
         private readonly IFilmsFilterService filmsfilterService;
+        private readonly IFilmDetailsService filmDetailsService;
 
+        
 
-        public MainSearchViewModel(IDatabaseService databaseService, IFilmsFilterService filmsfilterService)
+        public MainSearchViewModel(IDatabaseService databaseService, IFilmsFilterService filmsfilterService
+            ,IFilmDetailsService filmDetailsService
+            )
         {
             this.databaseService = databaseService;
             this.filmsfilterService = filmsfilterService;
+            this.filmDetailsService = filmDetailsService;
 
 
             CreateDatabaseCommand = new RelayCommand(OnCreateDatabaseCommandExecuted, CanCreateDatabaseCommandExecute);
 
             GotoDetailFilmCommand = new RelayCommand(OnGotoDetailFilmCommandExecuted, CanGotoDetailFilmCommandExecute);
+            
         }
 
 
@@ -200,23 +206,11 @@ namespace FilmsTest.ViewModel
             }
         }
 
-        private void ApplyFilmInfoFilter()
+        public async void ApplyFilmInfoFilter()
         {
-            var query = from film in Films
-                        join filmGenre in FilmGenres on film.FmID equals filmGenre.FmID
-                        join genre in Genres on filmGenre.GenID equals genre.GenID
-                        join filmActor in FilmActors on film.FmID equals filmActor.FmID
-                        join actor in Actors on filmActor.ActID equals actor.ActID
-                        select new { Film = film, Genre = genre, Actor = actor };
-
-
-            if (SelectedFilm != null)
-            {
-                query = query.Where(entry => entry.Film.FmID == SelectedFilm.FmID);
-            }
-
-            GenresFiltered = new ObservableCollection<GenreDTO>(query.Select(entry => entry.Genre).Distinct());
-            ActorsFiltered = new ObservableCollection<ActorDTO>(query.Select(entry => entry.Actor).Distinct());
+            var result = await filmDetailsService.ApplyFilmInfoFilterAsync(SelectedFilm, GenresFiltered, ActorsFiltered);
+            GenresFiltered = result.Item1; 
+            ActorsFiltered = result.Item2;
         }
 
         #endregion

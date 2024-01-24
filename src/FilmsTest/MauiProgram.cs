@@ -30,7 +30,7 @@ namespace FilmsTest
             builder.Services.AddScoped<IDatabaseService, DatabaseService>();
             builder.Services.AddScoped<IFilmsFilterService, FilmsFilterService>();
             
-            //builder.Services.AddScoped<IFilmDetailsService, FilmDetailsService>();
+            builder.Services.AddScoped<IFilmDetailsService, FilmDetailsService>();
 
 
             builder.Services.AddAutoMapper(typeof(DatabaseService));
